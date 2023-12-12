@@ -1,0 +1,8 @@
+Day 1 Final Project: Brand Name Generator - Python Code
+#
+print("Do you want to generate a name for your brand?\n")
+city_name=input("What is the name of the city you live in?  ")
+pet_name=input("What is the name of your pet?  ")
+print("Your band name could be:\n")
+print(city_name  +  pet_name)
+#
