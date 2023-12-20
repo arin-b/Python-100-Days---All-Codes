@@ -1,0 +1,27 @@
+import random
+from art import logo 
+print(logo)
+print("Welcome to the secret auction.")
+item_number = random.randrange(1000000000, 9999999999) #To assign a random identification number to the item (Purely UI Purpose)
+print(f"We are bidding for the following item: {item_number}")
+decision = 'yes'
+all_names = []
+all_bids = []
+while decision=='yes':
+  names = input("Please enter your name: ")
+  bids = int(input("Please enter your bid amount: $ "))
+  all_names.append(names)
+  all_bids.append(bids)
+  decision = input("Are there any more bidders? Please enter 'yes' or 'no': ")
+  clear()
+all_bidders = {'Names':all_names, 'Bids':all_bids}
+highest_bid = 0
+n = len(all_bids)
+x = 0
+index = 0
+for x in range(0,n):
+  if all_bidders['Bids'][x]>highest_bid:
+    highest_bid = all_bidders['Bids'][x]
+    index = x
+print(f"The highest bidder is {all_bidders['Names'][index]} with a bid of $ {highest_bid}!")
+exit()
