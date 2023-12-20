@@ -1,0 +1,81 @@
+#BlackJack Capstone Project
+from replit import clear 
+import random 
+from art import logo
+cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10] #List containing all possible cards
+d_total = 0 #the total of the dealer
+p_total = 0 #To display the total of the player
+p_cards=[] #to store player's cards
+d_cards=[] #to store dealer's cards
+def draw_dealer(): #function to draw cards for dealer
+  '''Draws and displays single card for the dealer'''
+  global d_total
+  choice = random.choice(cards)
+  d_cards.append(choice)
+  d_total += choice
+  print(f"The dealer's cards are: {d_cards}")
+  print(f"The dealer's total is: {d_total}")
+def draw_player(): #function to draw cards for player
+  '''Draws and displays single card for the user'''
+  global p_total
+  choice = random.choice(cards)
+  p_cards.append(choice)
+  p_total += choice
+  print(f"Your cards are: {p_cards}")
+  print(f"Your total is: {p_total}")
+def draws():
+  '''Executed when and as long as player wants to draw a card. Uses recursion.'''
+  draw_player()
+  if p_total>21:
+    print("You go above 21. You Lose.")
+  elif p_total==21:
+    passes()
+  else:
+    dorp = input("Do you wish to draw or pass?")
+    if dorp == 'd':
+      draws()
+    else:
+      passes()
+def passes():
+  '''To be executed when player passes. Also declares winner'''
+  draw_dealer()
+  if d_total>21:
+    print("Dealer has gone above 21. You win!!")
+  elif d_total>p_total:
+    print("The dealer wins. You lose!")
+  elif d_total<17:
+    while d_total<17:
+      draw_dealer()
+    if d_total>21:
+      print("Dealer goes above 21. You win!!")
+    elif d_total==p_total:
+      print("It is a draw!")
+    elif d_total<p_total:
+      print("You win!!")
+    else:
+      print("Dealer scores higher. You lose!")
+to_play = int(input("Do you want to play BlackJack? Type 1 for yes and 0 for no."))
+while to_play==1:
+  print(logo)
+  print("Welcome to BlackJack. Let us begin.")
+  draw_dealer()
+  choice = random.choice(cards)
+  p_cards.append(choice)
+  p_total += choice
+  draw_player()
+  if p_total>21:
+    print("Your total goes bove 21. You Lose!")
+  else:
+    dorp = input("Do you wish to draw or pass? Enter d to draw or p to pass.")
+    if dorp == 'd':
+      draws()
+    else:
+      passes()
+  p_cards.clear()
+  d_cards.clear()
+  p_total=0
+  d_total=0
+  to_play = int(input("Do you want to play another round? Press 1 if yes, 0 if no."))
+  if to_play==1:
+    clear()
+
