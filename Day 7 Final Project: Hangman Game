@@ -1,0 +1,43 @@
+import random
+from ascii_art import stages, logo
+from word import word_list
+chosen_word = random.choice(word_list)
+#print(f'Pssst, the solution is {chosen_word}.')
+print(logo)
+print("Welcome to the Hangman Game!\n\n")
+blanks = []
+n=len(chosen_word)
+for _a in range(0, n):
+    blanks.append('_')      
+#The above lines of code create a list with the number of blanks corresponding to the number of letters in the chosen word.
+#Blanks is a list of underscores.
+lives = 6
+flag = 0
+while '_' in blanks: 
+  guess = input("Guess a letter: ").lower()
+  for a in range(0, n):
+    if chosen_word[a]==guess:
+      blanks[a]=guess
+      flag+=1
+  if flag>=1:
+    print(stages[lives])
+    print("Good guess! The word is now:", end='')
+    for a in range(0, n):
+      print(blanks[a], end='')
+    print(f" You have {lives} lives left.") 
+  else:
+    lives-=1
+    if lives==0:
+      print(stages[lives])
+      print("You have run out of lives. You lose")
+      print(f"The correct word was {chosen_word}")
+      lives = 0
+      break
+    else:
+      print(stages[lives])
+      print(f"Wrong guess. You have {lives} lives left.", end=' ')
+      for a in range(0,n):
+        print(blanks[a], end=' ')
+  flag=0 
+if lives!=0:
+  print("\nYou Win!")
