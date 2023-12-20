@@ -1,0 +1,65 @@
+from game_data import data
+from art import logo
+from art import vs
+from replit import clear
+import random
+followers_A = 0 #to store no. of followers of A
+followers_B = 0 #to store no. of followers of B
+elements_of_data = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49]
+answer = '0' #to store the user's answer
+index_A=0 #to store index of A
+index_B=0 #to store index of B
+score = 0 #to store player's score
+to_play = 1
+print(logo)
+print("Welcome to the Higher-Lower Game!")
+print("Guess which of the following have more followers.")
+index_A = random.choice(elements_of_data)
+elements_of_data.remove(index_A)
+index_B = random.choice(elements_of_data)
+elements_of_data.remove(index_B)
+while (to_play == 1):
+  print(f"A: {data[index_A]['name'], data[index_A]['description'], data[index_A]['country']}")
+  print(vs)
+  print(f"B: {data[index_B]['name'], data[index_B]['description'], data[index_B]['country']}")
+  answer = input("Who has more followers? Type A or B.  ")
+  if (data[index_A]['follower_count']>data[index_B]['follower_count']) and answer=='A':
+    score += 1
+    index_A = index_B
+    index_B = random.choice(elements_of_data)
+    elements_of_data.remove(index_B)
+    print(f"You guessed right! Your score is: {score}")
+    if score==50:
+      print(f"Congratulations! You have won the game with the highest score possible: {score}!")
+      to_play = int(input("Do you want to play again? Type 1 for yes and 0 for no."))
+      if to_play ==1:
+        clear()
+    else:
+      print(f"You guessed correctly! Your score is: {score}")
+      clear()
+  elif (data[index_A]['follower_count']<data[index_B]['follower_count']) and answer=='B':
+    score += 1
+    index_A = index_B
+    index_B = random.choice(elements_of_data)
+    elements_of_data.remove(index_B)
+    print(f"You guessed right! Your score is: {score}")
+    if score==50:
+      print(f"Congratulations! You have won the game with the highest score possible: {score}!")
+      to_play = int(input("Do you want to play again? Type 1 for yes and 0 for no.  "))
+      if to_play ==1:
+        clear()
+    else:
+      print(f"You guessed correctly! Your score is: {score}")
+      clear()
+  else:
+    print("Wrong answer! You lose.")
+    print(f"Your final score is: {score}")
+    to_play = int(input("Do you want to play again? Type 1 for yes and 0 for no.  "))
+    if to_play == 1:
+      clear()
+    else:
+      exit()
+  score = 0
+  elements_of_data=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49]
+  
+    
