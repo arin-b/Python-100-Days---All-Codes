@@ -1,0 +1,159 @@
+This is the python code for creating the snake game using the turtle graphics library
+It contains the main.py file, along with the code of three additional files containing the class that were created to make this.
+
+1. main.py:
+from turtle import Screen
+import time
+from snake import Snake
+from food import Food
+from scoreboard import Scoreboard
+screen = Screen()
+screen.setup(width=600, height=600)
+screen.bgcolor("black")
+screen.title("Snake Game")
+screen.tracer(0)  # Read documentation. Used to turn off animation
+
+
+snake = Snake()
+food = Food()
+scoreboard = Scoreboard()
+
+
+screen.listen()
+screen.onkey(snake.up, "Up")
+screen.onkey(snake.down, "Down")
+screen.onkey(snake.left, "Left")
+screen.onkey(snake.right, "Right")
+
+game_is_on = True
+score = 0
+while game_is_on:
+    screen.update()
+    time.sleep(0.1)
+    snake.move()
+    scoreboard.display_score(score)
+    # Detect collision with food
+    if snake.head.distance(food) < 15:
+        score += 1
+        scoreboard.display_score(score)
+        food.refresh()
+        snake.extend()
+
+    # Detect collision with wall
+    if snake.head.xcor() > 295 or snake.head.ycor() > 300 or snake.head.xcor() < -295 or snake.head.ycor() < -300:
+        game_is_on = False
+        scoreboard.end_game(score)
+
+    # Detect collision with tail
+    for segment in snake.all_snakes[1:]:
+        if snake.head.distance(segment) < 5:
+            game_is_on = False
+            scoreboard.end_game(score)
+screen.exitonclick()
+
+
+2. The Snake Class:
+
+from turtle import Turtle
+
+STARTING_POSITIONS = [(0, 0), (-20, 0), (-40, 0)]
+MOVE_DISTANCE = 20
+UP = 90
+DOWN = 270
+LEFT = 180
+RIGHT = 0
+
+
+class Snake(Turtle):
+    def __init__(self):
+        super().__init__()
+        self.all_snakes = []
+        self.create_snake()
+        self.head = self.all_snakes[0]
+
+    def create_snake(self):
+        for position in STARTING_POSITIONS:
+            self.add_segment(position)
+
+    def add_segment(self, position):
+        new_snake_square = Turtle(shape="square")
+        new_snake_square.color("white")
+        new_snake_square.penup()
+        new_snake_square.goto(position)
+        self.all_snakes.append(new_snake_square)
+
+    def extend(self):
+        self.add_segment(self.all_snakes[-1].position())
+
+        # add new segment
+
+
+
+    def move(self):
+        for seg_num in range(len(self.all_snakes) - 1, 0, -1):  # Read this loop and understand its logic carefully
+            new_x = self.all_snakes[seg_num - 1].xcor()
+            new_y = self.all_snakes[seg_num - 1].ycor()
+            self.all_snakes[seg_num].goto(new_x, new_y)
+        self.head.forward(MOVE_DISTANCE)
+
+    def up(self):
+        if self.head.heading() != DOWN:
+            self.head.setheading(UP)
+
+    def down(self):
+        if self.head.heading() != UP:
+            self.head.setheading(DOWN)
+
+    def left(self):
+        if self.head.heading() != RIGHT:
+            self.head.setheading(LEFT)
+
+    def right(self):
+        if self.head.heading() != LEFT:
+            self.head.setheading(RIGHT)
+
+
+
+3. The Food Class:
+
+from turtle import Turtle
+import random
+
+
+class Food(Turtle):  # example of class inheritance. We are inheriting the Turtle class
+    def __init__(self):
+        super().__init__()
+        self.shape("circle")
+        self.penup()
+        self.shapesize(stretch_wid=0.5, stretch_len=0.5)
+        self.color("yellow")
+        self.speed("fastest")
+        self.refresh()
+
+    def refresh(self):
+        random_x = random.randint(-280, 280)
+        random_y = random.randint(-280, 280)
+        self.goto(random_x, random_y)
+
+4. The Scoreboard Class:
+
+
+from turtle import Turtle
+
+
+class Scoreboard(Turtle):
+    def __init__(self):
+        super().__init__()
+        self.goto(-10, 280)
+        self.color("white")
+        self.hideturtle()
+
+    def display_score(self, score):
+        self.clear()
+        self.write(arg=f"Score: {score}", align="center", font=("Courier", 14, "normal"))
+
+    def end_game(self, score):
+        self.goto(0, -10)
+        self.clear()
+        self.write(arg=f"Game Over\nYour score is: {score}", align="center", font=("Courier", 18, "normal"))
+
