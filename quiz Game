@@ -1,0 +1,156 @@
+Complete python code for a quiz game.
+Contains the main.py file along with three other python files containing classes that were created for this project.
+
+1. main.py
+
+# step2: Import everything required (for step 1, see the question_model class)
+from question_model import Question
+from data import question_data
+from quiz_brain import Quizbrain
+
+question_bank = []  # step3: create a list of question objects that can be easily accessed
+for question in question_data:  # All variables here are local and do not operate outside the loop
+    question_text = question['text']
+    question_answer = question['answer']
+    insert_question = Question(question_text, question_answer)
+    question_bank.append(insert_question)
+
+print("Welcome to the Quiz!\nType 'exit' if you wish to end the quiz.\n")
+print("a. General Knowledge\nb. Entertainment: Books\nc. Entertainment: Movies\nd. Entertainment: Music")
+print("e. Science and nature\nf. Science: Computer\ng. Sports\nh. Animals\ni. Celebrities\nj. Geography")
+category = input("Select one of the above categories. Type in the corresponding letter.")
+
+if category == 'a':
+    pass
+quiz = Quizbrain(question_bank)
+quiz.new_question()
+
+while quiz.still_has_questions():
+    quiz.new_question()
+
+print("You have completed the quiz!")
+print(f"Your final score is: {quiz.score}/{quiz.question_number}")
+
+2. question_model.py
+
+class Question: # Step1: create class question. Enter Q and corresp. ans. Object will get following attributes.
+    def __init__(self, question, answer): #
+        self.question = question
+        self.answer = answer
+
+3. quiz_brain.py
+
+class Quizbrain:  # step4: create a quiz brain that will keep track of questions and their answers.
+    def __init__(self, question_bank):
+        self.question_number = 0
+        self.question_list = question_bank
+        self.score = 0
+
+    def new_question(self):
+        current_question = self.question_list[self.question_number]
+        self.question_number += 1
+        user_guess = input(f"Q.{self.question_number}: {current_question.question} (True/False)?  ")
+        self.check_answer(user_guess, current_question.answer)
+
+    def still_has_questions(self):  # Step5: Check answer and decide whether to go forward
+        return self.question_number < len(self.question_list)
+
+    # step6: Create new method to check if answer is correct
+    def check_answer(self, user_guess, actual_answer):
+        if user_guess.lower() == actual_answer.lower():
+            print("You got it right!")
+            self.score += 1
+        elif user_guess.lower() == 'exit':
+            exit()
+        else:
+            print("You got it wrong")
+        print(f"The correct answer is {actual_answer}")
+        print(f"Your current score is {self.score}/{self.question_number}")
+        print("\n")
+
+4. data.py
+
+question_data = [
+    {"text": "A slug's blood is green.", "answer": "True"},
+    {"text": "The loudest animal is the African Elephant.", "answer": "False"},
+    {"text": "Approximately one quarter of human bones are in the feet.", "answer": "True"},
+    {"text": "The total surface area of a human lungs is the size of a football pitch.", "answer": "True"},
+    {"text": "In West Virginia, USA, if you accidentally hit an animal with your car, "
+             "you are free to take it home to eat.", "answer": "True"},
+    {"text": "In London, UK, if you happen to die in the House of Parliament, you are entitled to a state funeral.",
+     "answer": "False"},
+    {"text": "It is illegal to pee in the Ocean in Portugal.", "answer": "True"},
+    {"text": "You can lead a cow down stairs but not up stairs.", "answer": "False"},
+    {"text": "Google was originally called 'Backrub'.", "answer": "True"},
+    {"text": "Buzz Aldrin's mother's maiden name was 'Moon'.", "answer": "True"},
+    {"text": "No piece of square dry paper can be folded in half more than 7 times.", "answer": "True"},
+    {"text": "A few ounces of chocolate can to kill a small dog.", "answer": "True"}]
+
+general_knowledge = [{"type": "boolean", "difficulty": "medium", "category": "General Knowledge",
+                      "question": "&quot;Typewriter&quot; is the longest word that can be typed "
+                                  "using only the first row on a QWERTY keyboard.",
+                      "correct_answer": "True", "incorrect_answers": ["False"]},
+                     {"type": "boolean", "difficulty": "medium", "category": "General Knowledge",
+                      "question": "The vapor produced by e-cigarettes is actually water.",
+                      "correct_answer": "False", "incorrect_answers": ["True"]},
+                     {"type": "boolean", "difficulty": "easy", "category": "General Knowledge",
+                      "question": "Romanian belongs to the Romance language family, "
+                                  "shared with French, Spanish, Portuguese and Italian. ",
+                      "correct_answer": "True", "incorrect_answers": ["False"]},
+                     {"type": "boolean", "difficulty": "hard", "category": "General Knowledge",
+                      "question": "Stagecoach owned &quot;South West Trains&quot; "
+                                  "before losing the rights to FirstGroup and MTR in March of 2017.",
+                      "correct_answer": "True", "incorrect_answers": ["False"]},
+                     {"type": "boolean", "difficulty": "medium", "category": "General Knowledge",
+                      "question": "Instant mashed potatoes were invented by Canadian Edward Asselbergs in 1962.",
+                      "correct_answer": "True", "incorrect_answers": ["False"]},
+                     {"type": "boolean", "difficulty": "medium", "category": "General Knowledge",
+                      "question": "Popcorn was invented in 1871 by Frederick W. Rueckheim in the USA "
+                                  "where he sold the snack on the streets of Chicago.",
+                      "correct_answer": "False", "incorrect_answers": ["True"]},
+                     {"type": "boolean", "difficulty": "hard", "category": "General Knowledge",
+                      "question": "&quot;Number 16 Bus Shelter&quot; was a child&#039;"
+                                  "s name that was approved by the New Zealand government.",
+                      "correct_answer": "True", "incorrect_answers": ["False"]},
+                     {"type": "boolean", "difficulty": "medium", "category": "General Knowledge",
+                      "question": "The term &quot;Spam&quot; came before the food product &quot;Spam&quot;.",
+                      "correct_answer": "False", "incorrect_answers": ["True"]},
+                     {"type": "boolean", "difficulty": "medium", "category": "General Knowledge",
+                      "question": "Sitting for more than three hours a day can cut two years off a person&#039;s life expectancy.",
+                      "correct_answer": "True", "incorrect_answers": ["False"]},
+                     {"type": "boolean", "difficulty": "medium", "category": "General Knowledge",
+                      "question": "The French word for &quot;glass&quot; is &quot;glace&quot;.",
+                      "correct_answer": "False", "incorrect_answers": ["True"]},
+                     {"type": "boolean", "difficulty": "easy", "category": "General Knowledge",
+                      "question": "The Sun rises from the North.", "correct_answer": "False",
+                      "incorrect_answers": ["True"]},
+                     {"type": "boolean", "difficulty": "easy", "category": "General Knowledge",
+                      "question": "French is an official language in Canada.", "correct_answer": "True",
+                      "incorrect_answers": ["False"]},
+                     {"type": "boolean", "difficulty": "easy", "category": "General Knowledge",
+                      "question": "When you cry in space, your tears stick to your face.",
+                      "correct_answer": "True", "incorrect_answers": ["False"]},
+                     {"type": "boolean", "difficulty": "easy", "category": "General Knowledge",
+                      "question": "Nutella is produced by the German company Ferrero.",
+                      "correct_answer": "False", "incorrect_answers": ["True"]},
+                     {"type": "boolean", "difficulty": "easy", "category": "General Knowledge",
+                      "question": "&quot;27 Club&quot; is a term used to refer to a list of famous actors, musicians, "
+                                  "and artists who died at the age of 27.",
+                      "correct_answer": "True", "incorrect_answers": ["False"]},
+                     {"type": "boolean", "difficulty": "easy", "category": "General Knowledge",
+                      "question": "The Lego Group was founded in 1932.", "correct_answer": "True",
+                      "incorrect_answers": ["False"]},
+                     {"type": "boolean", "difficulty": "medium", "category": "General Knowledge",
+                      "question": "The pickled gherkin was first added to hamburgers because a US health law required "
+                                  "all fast-food to include a source of Vitamin C.",
+                      "correct_answer": "False", "incorrect_answers": ["True"]},
+                     {"type": "boolean", "difficulty": "medium", "category": "General Knowledge",
+                      "question": "The average woman is 5 inches / 13 centimeters shorter than the average man.",
+                      "correct_answer": "True", "incorrect_answers": ["False"]},
+                     {"type": "boolean", "difficulty": "easy", "category": "General Knowledge",
+                      "question": "Scotland voted to become an independent country "
+                                  "during the referendum from September 2014.",
+                      "correct_answer": "False", "incorrect_answers": ["True"]},
+                     {"type": "boolean", "difficulty": "easy", "category": "General Knowledge",
+                      "question": "Ping-Pong originated in England", "correct_answer": "True",
+                      "incorrect_answers": ["False"]}]
