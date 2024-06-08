@@ -1,0 +1,94 @@
+Content for main.py:
+
+import turtle
+import pandas
+
+screen = turtle.Screen()
+screen.title("U.S. States Game")
+image = "blank_states_img.gif"
+screen.addshape(image)
+
+turtle.shape(image)
+
+# def get_mouse_click_coor(x, y):
+#     print(x, y)
+# turtle.onscreenclick(get_mouse_click_coor)
+# the above lines are used to obtain the coordinates of a mouse click. Here, they are included in csv file
+data = pandas.read_csv("/home/arindamb/Desktop/50_states.csv")
+all_states = data.state.to_list()
+score = 0
+completed_states = []
+while score < 50:
+    answer_state = screen.textinput(title=f"{score}/50", prompt="What's another state name?")
+    answer_state = answer_state.title()
+    if answer_state == 'Exit':
+        missing_states =[state for state in all_states if state not in completed_states]
+        new_data = pandas.DataFrame(missing_states)
+        new_data.to_csv("States_to_learn.csv")
+        break
+    if answer_state in all_states:
+        t = turtle.Turtle()
+        t.hideturtle()
+        t.penup()
+        state_data = data[data.state == answer_state]
+        t.goto(int(state_data.x), int(state_data.y))
+        t.write(answer_state)
+        score += 1
+        completed_states.append(answer_state)
+
+# If answer_state is present in the list of states
+# turtle.mainloop() # unlike exit on click, keeps screen open through multiple clicks
+screen.exitonclick()
+
+
+
+
+Content for states_to_lern.csv:
+,0
+0,Alabama
+1,Alaska
+2,Arizona
+3,Arkansas
+4,Colorado
+5,Connecticut
+6,Delaware
+7,Florida
+8,Georgia
+9,Hawaii
+10,Idaho
+11,Illinois
+12,Indiana
+13,Iowa
+14,Kansas
+15,Kentucky
+16,Louisiana
+17,Maine
+18,Maryland
+19,Massachusetts
+20,Michigan
+21,Minnesota
+22,Mississippi
+23,Missouri
+24,Nebraska
+25,Nevada
+26,New Hampshire
+27,New Mexico
+28,New York
+29,North Carolina
+30,North Dakota
+31,Ohio
+32,Oklahoma
+33,Pennsylvania
+34,Rhode Island
+35,South Carolina
+36,South Dakota
+37,Tennessee
+38,Texas
+39,Utah
+40,Vermont
+41,Virginia
+42,Washington
+43,West Virginia
+44,Wisconsin
+
+take the required image from the drive.
