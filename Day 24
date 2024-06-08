@@ -1,0 +1,23 @@
+Contents for main.py:
+
+file = open('my_file.txt')
+contents = file.read()
+print(contents)
+file.close()  # Every open file should ideally be closed
+
+# but if you keep forgetting to close the file, here's another option:
+with open('my_file.txt') as file_variable:
+    content = file_variable.read()
+    print(content)
+
+# here, there is no need to close the file. after all indented operations are carried out, file will automatically close
+
+with open('my_file.txt', mode='w') as file1:
+    file1.write('Newline text')
+# by default, txt files are opened in read-only mode. If u wish to write in the file you need to change the mode
+# however, the write command will delete all previous content before writing the specified text
+# but if u wish to add content without deleting old one, set mode = 'a' (append) in the open command
+# if you open a non-existent file in write mode, that file will be newly created for you
+# in the write command you can use formatting operators such as \n
+
+
