@@ -1,0 +1,174 @@
+Contents for main.py:
+
+from turtle import Screen
+from net import Net
+from paddle import Paddle
+from ball import Ball
+from scoreboard import Scoreboard
+import time
+screen = Screen()
+screen.setup(width=800, height=600)
+screen.bgcolor("black")
+screen.title("Pong")
+screen.tracer(0)
+scoreboard = Scoreboard()
+
+net = Net()
+ball = Ball()
+
+screen.listen()
+r_paddle = Paddle((380, 0))
+l_paddle = Paddle((-380, 0))
+screen.onkey(r_paddle.move_paddle_up, "Up")
+screen.onkey(r_paddle.move_paddle_down, "Down")
+screen.onkey(l_paddle.move_paddle_up, "w")
+screen.onkey(l_paddle.move_paddle_down, "s")
+
+game_is_on = True
+while game_is_on:
+    time.sleep(ball.move_speed)
+    screen.update()
+    ball.move()
+
+    # detect collision with top and bottom walls
+    if ball.ycor() > 280 or ball.ycor() < -280:
+        ball.bounce()
+
+    # detect collision with paddles
+    if ball.distance(r_paddle) < 50 and ball.xcor() > 330:
+        ball.bounce_off_paddle()
+
+    if ball.distance(l_paddle) < 50 and ball.xcor() < -330:
+        ball.bounce_off_paddle()
+
+    # detect when ball misses right paddle
+    if ball.xcor() > 380:
+        ball.reset_position()
+        scoreboard.l_point()
+
+    # detect when ball misses left paddle
+    if ball.xcor() < -380:
+        ball.reset_position()
+        scoreboard.r_point()
+
+screen.exitonclick()
+
+
+Content for scoreboard.py:
+
+from turtle import Turtle
+
+
+class Scoreboard(Turtle):
+    def __init__(self):
+        super().__init__()
+        self.penup()
+        self.color("white")
+        self.hideturtle()
+        self.lscore = 0
+        self.rscore = 0
+        self.update_scoreboard()
+
+    def update_scoreboard(self):
+        self.clear()
+        self.goto(-100, 185)
+        self.write(self.lscore, align="center", font=("Courier", 80, "normal"))
+        self.goto(100, 185)
+        self.write(self.rscore, align="center", font=("Courier", 80, "normal"))
+
+    def l_point(self):
+        self.lscore += 1
+        self.update_scoreboard()
+
+    def r_point(self):
+        self.rscore += 1
+        self.update_scoreboard()
+
+
+
+Content for ball.py:
+
+
+from turtle import Turtle
+
+
+class Ball(Turtle):
+    def __init__(self):
+        super().__init__()
+        self.shape("circle")
+        self.color("white")
+        self.penup()
+        self.xmove = 10
+        self.ymove = 10
+        self.move_speed = 0.1
+
+    def move(self):
+        new_x = self.xcor()+self.xmove
+        new_y = self.ycor()+self.ymove
+        self.goto(new_x, new_y)
+
+    def bounce(self):
+        self.ymove *= -1
+
+    def bounce_off_paddle(self):
+        self.xmove *= -1
+        self.move_speed *= 0.9
+
+    def reset_position(self):
+        self.goto(0,0)
+        self.move_speed = 0.1
+        self.xmove *= -1
+
+
+
+Content for paddle.py:
+
+from turtle import Turtle
+
+
+class Paddle(Turtle):
+    def __init__(self, position):
+        super().__init__()
+        self.shape("square")
+        self.shapesize(stretch_wid=4, stretch_len=0.5)
+        self.color("white")
+        self.penup()
+        self.goto(position)
+
+    def move_paddle_up(self):
+        x = self.xcor()
+        y = self.ycor()
+        self.goto(x=x, y=y+20)
+
+    def move_paddle_down(self):
+        x = self.xcor()
+        y = self.ycor()
+        self.goto(x=x, y=y-20)
+
+
+
+Content for net.py:
+
+
+from turtle import Turtle
+
+
+class Net(Turtle):
+    def __init__(self):
+        super().__init__()
+        self.hideturtle()
+        self.pencolor("white")
+        self.pensize(2)
+        self.create_net()
+
+    def create_net(self):
+        self.penup()
+        self.goto(x=0, y=-300)
+        self.left(90)
+        for i in range(1, 18):
+            self.pendown()
+            self.forward(20)
+            self.penup()
+            self.forward(20)
+
+
