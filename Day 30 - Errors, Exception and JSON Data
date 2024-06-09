@@ -1,0 +1,32 @@
+# # Error: File Not Found
+# # Blocks used in exception handling: try, except, else, and finally
+# try:  # For lines of code that could possibly show error
+#     file = open('a_data.txt')
+#     a_dictionary = {"key":"Value"}
+#     print(a_dictionary["sfsds"])
+#
+# except FileNotFoundError:  # If above lines give error, this block will execute
+#     file = open('a_data.txt', 'w')
+#     file.write("Something")
+#     print("There is an error")
+#
+# except KeyError as error_message:
+#     print(f"The Key {error_message}does not exist")
+#
+# else:
+#     content = file.read()
+#     print(content)
+#
+# finally:
+#     file.close()
+#
+# # To raise an error type: raise TypeError("Optional Message")
+
+height = float(input("Height: "))
+weight = int(input("Weight: "))
+
+if height > 3:
+    raise ValueError("Human Height Cannot Exceed 3 metres.")
+
+bmi = weight/height**2
+print(bmi)
