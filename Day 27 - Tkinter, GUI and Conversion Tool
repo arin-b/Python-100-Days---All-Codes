@@ -1,0 +1,176 @@
+Contents for main.py:
+
+from tkinter import *
+
+
+def button_clicked():
+    new_text = inputt.get()
+    new_text = int(new_text) * 1.609
+    label3.config(text=new_text)
+
+
+window = Tk()  # this is the tkinter equivalent of a turtle screen
+window.title("Mile to Kilometer Converter")
+window.minsize(width=500, height=400)
+window.config(padx=100, pady=200)  # to add padding to both sides of the screen
+
+# Lables
+label1 = Label(text="is equal to", font=("Times New Roman", 15))
+# my_label.pack()  # used to display the label on the screen. Centres by default
+# my_label.place(x=100, y=100)  # like pack, but can place more accurately
+label1.grid(column=0, row=2)
+# Note that the first element declared in a grid always appears at upper left hand corner despite the column & row value
+# All subsequent widgets are placed in the grid relative to the first one
+label1.config(padx=10, pady=10)
+
+label2 = Label(text="Miles", font=("Times New Roman", 15))
+label2.grid(column=2, row=1)
+label2.config(padx=10, pady=10)
+
+label3 = Label(text="0", font=("Times New Roman", 20, 'bold'))
+label3.grid(column=1, row=2)
+label3.config(padx=10, pady=10)
+
+label4 = Label(text="kilometers", font=("Times New Roman", 15))
+label4.grid(column=2, row=2)
+label4.config(padx=10, pady=10)
+
+# Buttons
+
+button = Button(text="Calculate", command=button_clicked)
+button.grid(column=1, row=3)
+button.config(padx=20, pady=20)
+
+# entry
+inputt = Entry(width=10)
+inputt.grid(column=1, row=1)
+
+
+# Note: we cannot use grid and pack together
+
+window.mainloop()  # This prevents the window from closing on its own
+
+
+Contents for info.py:
+
+from tkinter import *
+
+window = Tk()  # this is the tkinter equivalent of a turtle screen
+window.title("My First GUI Program")
+window.minsize(width=500, height=400)
+
+# Lables
+my_label = Label(text="I am a label", font=("Times New Roman", 25, "italic"))
+my_label.pack()  # used to display the label on the screen. Centres by default
+
+
+# *args: Many positional arguments
+def add(*args):
+    sum1 = 0
+    for n in args:
+        sum1 += n
+    print(sum1)
+
+
+# The *args basically turn the input into a tuple
+add(1, 2, 3, 4, 5, 6)  # because of the * keyword in the function def, you can enter any num of arguments
+
+
+# **kwargs: For multiple keyword arguments (Keyword is ** here)
+def calculate(**kwargs):
+    c = kwargs["a"] + kwargs["b"]
+    print(c)
+
+
+# The **kwargs turns the inputs into a dictionary
+calculate(a=7, b=4)
+
+
+# Buttons
+def button_clicked():
+    new_text = entry.get()
+    my_label.config(text=new_text)
+
+
+button = Button(text="Click Me", command=button_clicked)  # Remember we aren't calling the function. So no parentheses
+button.pack()
+
+# Entries
+entry = Entry(width=30)
+# Add some text to begin with
+entry.insert(END, string="Some text to begin with.")
+# Gets text in entry
+print(entry.get())
+entry.pack()
+
+# Text
+text = Text(height=5, width=30)
+# Puts cursor in textbox.
+text.focus()
+# Adds some text to begin with.
+text.insert(END, "Example of multi-line text entry.")
+# Get's current value in textbox at line 1, character 0
+print(text.get("1.0", END))
+text.pack()
+
+
+# Spinbox
+def spinbox_used():
+    # gets the current value in spinbox.
+    print(spinbox.get())
+
+
+spinbox = Spinbox(from_=0, to=10, width=5, command=spinbox_used)
+spinbox.pack()
+
+
+# Scale
+# Called with current scale value.
+def scale_used(value):
+    print(value)
+
+
+scale = Scale(from_=0, to=100, command=scale_used)
+scale.pack()
+
+
+# Checkbutton
+def checkbutton_used():
+    # Prints 1 if On button checked, otherwise 0.
+    print(checked_state.get())
+
+
+# variable to hold on to checked state, 0 is off, 1 is on.
+checked_state = IntVar()
+checkbutton = Checkbutton(text="Is On?", variable=checked_state, command=checkbutton_used)
+checked_state.get()
+checkbutton.pack()
+
+
+# Radiobutton
+def radio_used():
+    print(radio_state.get())
+
+
+# Variable to hold on to which radio button value is checked.
+radio_state = IntVar()
+radiobutton1 = Radiobutton(text="Option1", value=1, variable=radio_state, command=radio_used)
+radiobutton2 = Radiobutton(text="Option2", value=2, variable=radio_state, command=radio_used)
+radiobutton1.pack()
+radiobutton2.pack()
+
+
+# Listbox
+def listbox_used(event):
+    # Gets current selection from listbox
+    print(listbox.get(listbox.curselection()))
+
+
+listbox = Listbox(height=4)
+fruits = ["Apple", "Pear", "Orange", "Banana"]
+for item in fruits:
+    listbox.insert(fruits.index(item), item)
+listbox.bind("<<ListboxSelect>>", listbox_used)
+listbox.pack()
+
+window.mainloop()  # This prevents the window from closing on its own
