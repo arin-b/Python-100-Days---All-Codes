@@ -1,0 +1,128 @@
+Content for main.py:
+
+import requests
+from datetime import datetime
+import math
+import smtplib
+
+MY_LAT = 19.967219 # Your latitude
+MY_LONG = 73.773773 # Your longitude
+
+my_email = "sherryholmes122b@gmail.com"
+my_password = "xqirdcohiexwwycy"
+
+response = requests.get(url="http://api.open-notify.org/iss-now.json")
+response.raise_for_status()
+data = response.json()
+
+iss_latitude = float(data["iss_position"]["latitude"])
+iss_longitude = float(data["iss_position"]["longitude"])
+
+#Your position is within +5 or -5 degrees of the ISS position.
+
+
+parameters = {
+    "lat": MY_LAT,
+    "lng": MY_LONG,
+    "formatted": 0,
+}
+
+response = requests.get("https://api.sunrise-sunset.org/json", params=parameters)
+response.raise_for_status()
+data = response.json()
+sunrise = int(data["results"]["sunrise"].split("T")[1].split(":")[0])
+sunset = int(data["results"]["sunset"].split("T")[1].split(":")[0])
+
+time_now = datetime.now()
+
+#If the ISS is close to my current position
+# and it is currently dark
+# Then send me an email to tell me to look up.
+# BONUS: run the code every 60 seconds.
+
+if math.isclose(MY_LAT, iss_latitude, rel_tol=0.5) and math.isclose(MY_LONG, iss_longitude, rel_tol=0.5):
+    if sunset <= time_now.hour < sunrise:
+        connection = smtplib.SMTP("smtp.gmail.com")
+        connection.starttls()
+        connection.login(user=my_email, password=my_password)
+        connection.sendmail(from_addr=my_email,
+                            to_addrs="harrypeerot@yahoo.com",
+                            msg="Subject:ISS Notifier\n\nLook up! The ISS may be flying overhead!")
+
+        connection.close()
+
+
+
+
+Content for the kanye app:
+
+from tkinter import *
+import requests
+
+def get_quote():
+    response = requests.get(url="https://api.kanye.rest/")
+    response.raise_for_status()
+    data = response.json()["quote"]
+    canvas.itemconfig(quote_text, text = data)
+
+
+
+
+window = Tk()
+window.title("Kanye Says...")
+window.config(padx=50, pady=50)
+
+canvas = Canvas(width=300, height=414)
+background_img = PhotoImage(file="background.png")
+canvas.create_image(150, 207, image=background_img)
+quote_text = canvas.create_text(150, 207, text="Kanye Quote Goes HERE", width=250, font=("Arial", 30, "bold"), fill="white")
+canvas.grid(row=0, column=0)
+
+kanye_img = PhotoImage(file="kanye.png")
+kanye_button = Button(image=kanye_img, highlightthickness=0, command=get_quote)
+kanye_button.grid(row=1, column=0)
+
+
+
+window.mainloop()
+
+Content for info.py:
+
+import requests
+from datetime import datetime
+response = requests.get(url="http://api.open-notify.org/iss-now.json")
+
+home_long = 73.773773
+home_lat = 19.967219
+
+# Type of response codes (eg 404 not found):
+# 1xx : hold one smthg is not right
+# 2xx : here you go everything is fine
+# 3xx : you don't have permission. go away
+# 4xx : you (user) screwed up
+# 5xx : I (server) screwed up
+
+# response.raise_for_status()
+#
+# data = response.json()
+# long = response.json()["iss_position"]["longitude"]
+# lat = response.json()["iss_position"]["latitude"]
+# iss_location = (lat, long)
+parameters = {
+    "lat": home_lat,
+    "lng": home_long,
+    "formatted": 0
+}
+sunset_response = requests.get(url="https://api.sunrise-sunset.org/json?lat=19.967219&lng=73.773773", params=parameters)
+sunset_response.raise_for_status()
+sunset_data = sunset_response.json()["results"]["sunset"].split("T")[1].split(":")[0]
+sunrise_data = sunset_response.json()["results"]["sunrise"].split("T")[1].split(":")[0]
+data = (sunrise_data, sunset_data)
+# hour_of_sunrise = sunrise_data.split("T")[1].split(":")[0]
+# hour_of_sunset = sunset_data.split("T")[1].split(":")[0]
+
+time_now = datetime.now()
+print(data)
+print(time_now.hour)
+
+
