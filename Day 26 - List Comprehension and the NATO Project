@@ -1,0 +1,115 @@
+Contents for main.py
+
+# student_dict = {
+#     "student": ["Angela", "James", "Lily"],
+#     "score": [56, 76, 98]
+# }
+#
+# #Looping through dictionaries:
+# for (key, value) in student_dict.items():
+#     #Access key and value
+#     pass
+#
+import pandas
+
+# student_data_frame = pandas.DataFrame(student_dict)
+#
+# #Loop through rows of a data frame
+# for (index, row) in student_data_frame.iterrows():
+#     #Access index and row
+#     #Access row.student or row.score
+#     pass
+
+# Keyword Method with iterrows()
+# {new_key:new_value for (index, row) in df.iterrows()}
+
+# TODO 1. Create a dictionary in this format:
+# {"A": "Alfa", "B": "Bravo"}
+data = pandas.read_csv("nato_phonetic_alphabet.csv")
+nato_dict = {row.letter: row.code for (index, row) in data.iterrows()}
+
+
+# TODO 2. Create a list of the phonetic code words from a word that the user inputs.
+def generate_phonetic():
+    word = input("Enter a word: ").upper()
+    try:
+        letters = [nato_dict[letter] for letter in word]
+    except KeyError:
+        print("Sorry. Only letters in the alphabet please.")
+        generate_phonetic()
+    else:
+        print(letters)
+
+
+generate_phonetic()
+
+
+Contents for info.py:
+
+# List comprehension allows us to use lists in a different way
+# One example if given below
+# Say we wish to increase the value of all list items by 1, the traditional method is given below:
+# numbers = [1, 2, 3]
+# new_list = []
+# for n in numbers:
+#     add_1 = n + 1
+#     new_list.append(add_1)
+# Instead of all that code, we can use list comprehension as follows:
+
+# new_list = [new_item for item in list]
+# In the above syntax, replace new_item, item and list with corresponding value from the traditional code
+# new_list = [n+1 for n in numbers]
+# another example is:
+# name = "Arindam"
+# new_list = [letter for letter in name]
+# For specific conditions:
+# new_list = [item for item in list if test]
+
+# Dictionary Comprehension:
+# creating new dictionary from list:
+# new_dict = {new_key:new_value for item in list}
+# creating new dictionary from existing dictionary:
+# new_dict = {new_key:new_value for (key, value) in dict.items() if test}
+
+# How to iterate over a pandas data frame
+# student_data = {"Student": ["Arindam", 'Anvik', 'Kaushik'], "Marks": [60, 65, 70]}
+# student_data_frame = pandas.DataFrame(student_data)
+# for (key, value) in student_data_frame.items():
+#     print(key)   gives the column names
+#     print(values)
+# but pandas has an inbuilt loop:
+# for (index, row) in student_data_frame.iterrow():
+#     print(index)
+#     print(row.student)
+
+
+Contents for nato_phonetic_alphabet.csv
+
+
+letter,code
+A,Alfa
+B,Bravo
+C,Charlie
+D,Delta
+E,Echo
+F,Foxtrot
+G,Golf
+H,Hotel
+I,India
+J,Juliet
+K,Kilo
+L,Lima
+M,Mike
+N,November
+O,Oscar
+P,Papa
+Q,Quebec
+R,Romeo
+S,Sierra
+T,Tango
+U,Uniform
+V,Victor
+W,Whiskey
+X,X-ray
+Y,Yankee
+Z,Zulu
